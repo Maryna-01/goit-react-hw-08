@@ -11,11 +11,9 @@ import {
 } from '../auth/operations';
 
 export const initialState = {
-    contact: {
-        items: [],
-        loading: false,
-        error: null,
-    },
+    items: [],
+    loading: false,
+    error: null,
 };
 
 const contactsSlice = createSlice({
