@@ -10,13 +10,12 @@ import {
 
 const initialState = {
     user: {
-        name: localStorage.getItem('authUser') || null,
+        name: null,
         email: null
     },
-    token: localStorage.getItem('authToken') || null,
-    isLoggedIn: !!localStorage.getItem('authToken'),
+    token: null,
+    isLoggedIn: false,
     isRefreshing: false,
-    contacts: []
 };
 
 const authSlice = createSlice({
@@ -28,6 +27,9 @@ const authSlice = createSlice({
                 state.user = action.payload.user;
                 state.token = action.payload.token;
                 state.isLoggedIn = true;
+                // Зберігаємо в localStorage при реєстрації
+                localStorage.setItem('authUser', action.payload.user.name);
+                localStorage.setItem('authToken', action.payload.token);
             })
             .addCase(logIn.fulfilled, (state, action) => {
                 state.user = action.payload.user;
@@ -61,4 +63,3 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
-export const selectFilteredContacts = (state) => state.auth.contacts.filter(contact => contact.isFiltered);

@@ -6,13 +6,14 @@ import {
     deleteContact,
     fetchContacts
 } from './operations';
+import {
+    logOut
+} from '../auth/operations'; // Імпортуємо logOut для обробки очищення контактів при виході
 
 const initialState = {
-    contacts: {
-        items: [],
-        loading: false,
-        error: null,
-    },
+    items: [],
+    loading: false,
+    error: null,
 };
 
 const contactsSlice = createSlice({
@@ -32,16 +33,17 @@ const contactsSlice = createSlice({
             state.loading = false;
             state.error = action.payload;
         })
-
         .addCase(addContact.fulfilled, (state, action) => {
             state.items.push(action.payload);
         })
-
         .addCase(deleteContact.fulfilled, (state, action) => {
             state.items = state.items.filter(
                 contact => contact.id !== action.payload
-            );
-        }),
+            )
+        })
+        .addCase(logOut.fulfilled, state => { // Очищуємо контакти при logOut
+            state.items = [];
+        })
 });
 
 export const contactsReducer = contactsSlice.reducer;
