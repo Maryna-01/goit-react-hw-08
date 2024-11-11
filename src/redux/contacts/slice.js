@@ -8,12 +8,14 @@ import {
 } from './operations';
 import {
     logOut
-} from '../auth/operations'; // Імпортуємо logOut для обробки очищення контактів при виході
+} from '../auth/operations';
 
-const initialState = {
-    items: [],
-    loading: false,
-    error: null,
+export const initialState = {
+    contact: {
+        items: [],
+        loading: false,
+        error: null,
+    },
 };
 
 const contactsSlice = createSlice({
@@ -34,15 +36,15 @@ const contactsSlice = createSlice({
             state.error = action.payload;
         })
         .addCase(addContact.fulfilled, (state, action) => {
-            state.items.push(action.payload);
+            state.items.unshift(action.payload);
         })
         .addCase(deleteContact.fulfilled, (state, action) => {
             state.items = state.items.filter(
                 contact => contact.id !== action.payload
             )
         })
-        .addCase(logOut.fulfilled, state => { // Очищуємо контакти при logOut
-            state.items = [];
+        .addCase(logOut.fulfilled, () => {
+            return initialState;
         })
 });
 
